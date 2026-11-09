@@ -1,0 +1,868 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>foryou &lt;3</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Short+Stack&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#f8f3eb;
+  --card:#fffaf2;
+  --ink:#875c59;
+  --line:#b98b8a;
+  --button:#a64f55;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Patrick Hand',cursive;
+  overflow-x:hidden;
+}
+
+.bg-decoration{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:0;
+}
+
+.deco{
+  position:absolute;
+  color:#d5aaa5;
+  opacity:.42;
+  font-size:24px;
+  font-family:Arial,sans-serif;
+}
+
+.deco:nth-child(1){top:6%;left:5%}
+.deco:nth-child(2){top:8%;left:24%}
+.deco:nth-child(3){top:5%;left:48%}
+.deco:nth-child(4){top:8%;right:24%}
+.deco:nth-child(5){top:5%;right:5%}
+.deco:nth-child(6){top:29%;left:3%}
+.deco:nth-child(7){top:34%;left:20%}
+.deco:nth-child(8){top:29%;right:4%}
+.deco:nth-child(9){top:57%;left:5%}
+.deco:nth-child(10){top:63%;right:8%}
+.deco:nth-child(11){bottom:10%;left:8%}
+.deco:nth-child(12){bottom:6%;left:45%}
+.deco:nth-child(13){bottom:10%;right:10%}
+.deco:nth-child(14){top:19%;left:12%}
+.deco:nth-child(15){top:21%;right:12%}
+
+.app{
+  position:relative;
+  z-index:1;
+  width:100%;
+  max-width:520px;
+  min-height:100vh;
+  margin:auto;
+  padding:20px 14px;
+}
+
+.page{
+  display:none;
+  min-height:calc(100vh - 40px);
+  align-items:center;
+  justify-content:center;
+  animation:pageIn .4s ease;
+}
+
+.page.active{display:flex}
+
+@keyframes pageIn{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* CARD */
+
+.card{
+  width:100%;
+  max-width:310px;
+  background:rgba(255,250,242,.97);
+  border:2px dotted var(--line);
+  border-radius:16px;
+  padding:23px 20px 21px;
+  text-align:center;
+}
+
+.card-icon{
+  width:58px;
+  height:58px;
+  object-fit:contain;
+  display:block;
+  margin:0 auto 10px;
+}
+
+.card-title{
+  font-family:'Short Stack',cursive;
+  font-size:24px;
+  line-height:1.25;
+  font-weight:400;
+  letter-spacing:1px;
+  color:var(--ink);
+  margin:0 0 15px;
+}
+
+.card-text{
+  font-size:17px;
+  line-height:1.45;
+  margin:0 0 13px;
+}
+
+.card-text.small{font-size:15px}
+
+.date-small{
+  font-size:12px;
+  color:#b49a6b;
+  margin:11px 0 0;
+}
+
+/* PIN */
+
+.pin-wrap{
+  display:flex;
+  justify-content:center;
+  gap:6px;
+  margin:0 0 9px;
+}
+
+.pin{
+  width:38px;
+  height:39px;
+  border:1.5px solid var(--line);
+  border-radius:8px;
+  background:#fffaf2;
+  text-align:center;
+  font-family:'Patrick Hand',cursive;
+  font-size:21px;
+  color:var(--ink);
+  outline:none;
+  padding:0;
+}
+
+.pin:focus{
+  border-color:#a67b78;
+  box-shadow:0 0 0 2px rgba(185,139,138,.18);
+}
+
+.clue-link{
+  display:inline-block;
+  font-size:14px;
+  color:#9d7470;
+  border-bottom:1px dotted var(--line);
+  cursor:pointer;
+  margin-bottom:6px;
+}
+
+.error{
+  color:#c56b42;
+  font-size:13px;
+  min-height:17px;
+}
+
+/* BUTTON */
+
+.open-btn,.next-btn{
+  background:var(--button);
+  color:#fffaf2;
+  border:0;
+  border-radius:20px;
+  padding:8px 21px;
+  font-family:'Patrick Hand',cursive;
+  font-size:16px;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.open-btn:hover,.next-btn:hover{
+  transform:translateY(-1px);
+  background:#98484e;
+}
+
+.next-btn{margin-top:7px}
+
+/* DIVIDER */
+
+.divider{
+  width:50px;
+  height:2px;
+  background:#c9a6a2;
+  margin:13px auto;
+  border-radius:10px;
+}
+
+/* AMPLOP */
+
+.envelope{
+  width:180px;
+  height:115px;
+  margin:14px auto 15px;
+  position:relative;
+  cursor:pointer;
+  transition:.25s;
+}
+
+.envelope:hover{transform:translateY(-3px)}
+
+.envelope-body{
+  position:absolute;
+  inset:0;
+  background:#e7b9b7;
+  border:2px solid #765d55;
+  border-radius:3px;
+  overflow:hidden;
+}
+
+.envelope-body::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(145deg,transparent 49.5%,#8c6c64 50%,transparent 50.5%),
+    linear-gradient(215deg,transparent 49.5%,#8c6c64 50%,transparent 50.5%);
+}
+
+.envelope-flap{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:#dba7a8;
+  clip-path:polygon(0 0,100% 0,50% 55%);
+  border:2px solid #765d55;
+  z-index:2;
+}
+
+.seal{
+  position:absolute;
+  top:42%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:39px;
+  height:39px;
+  border-radius:50%;
+  background:#3e4140;
+  border:3px solid #252727;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#171919;
+  font-size:20px;
+  z-index:3;
+}
+
+/* SURAT TERAKHIR */
+
+.final-card{
+  max-width:360px;
+  padding:24px 21px 22px;
+}
+
+.final-card .card-title{
+  font-size:25px;
+  margin-bottom:16px;
+}
+
+.final-card .card-text{
+  font-size:17px;
+  line-height:1.55;
+  text-align:left;
+  margin-bottom:14px;
+}
+
+.signature{
+  text-align:right;
+  font-size:18px;
+  line-height:1.45;
+  margin-top:20px;
+}
+
+/* FOTO TERAKHIR */
+
+.photo-card{
+  max-width:360px;
+  padding:24px 18px 22px;
+}
+
+.photo-card .card-title{
+  font-size:24px;
+  margin-bottom:10px;
+}
+
+.photo-card .card-text{
+  font-size:16px;
+  margin-bottom:18px;
+}
+
+.photo-gallery{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  width:100%;
+  margin:0 auto 18px;
+}
+
+.landscape-photo{
+  width:100%;
+  aspect-ratio:16/9;
+  object-fit:cover;
+  display:block;
+  border-radius:8px;
+  border:1px solid #e1ceca;
+  background:#f5eee6;
+}
+
+/* MUSIK */
+
+.music-btn{
+  position:fixed;
+  right:18px;
+  bottom:18px;
+  width:43px;
+  height:43px;
+  border-radius:50%;
+  border:0;
+  background:#e8c6c1;
+  color:#765d55;
+  font-size:19px;
+  cursor:pointer;
+  z-index:10;
+}
+
+/* MODAL */
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(73,58,40,.42);
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  z-index:20;
+}
+
+.modal.show{display:flex}
+
+.modal-box{
+  width:100%;
+  max-width:390px;
+  background:#fffaf2;
+  border:2px dotted var(--line);
+  border-radius:15px;
+  padding:18px 16px 16px;
+  text-align:center;
+}
+
+.modal-text{
+  font-size:16px;
+  line-height:1.35;
+  margin:0 0 11px;
+}
+
+.modal-btn{
+  background:var(--button);
+  color:white;
+  border:0;
+  border-radius:20px;
+  padding:7px 23px;
+  font-family:inherit;
+  font-size:16px;
+  cursor:pointer;
+}
+
+@media(max-width:480px){
+  .app{padding:18px 13px}
+  .card{max-width:310px;padding:22px 18px 20px}
+  .card-title{font-size:23px}
+  .card-text{font-size:16px}
+  .pin{width:37px;height:38px}
+  .final-card{max-width:340px}
+  .final-card .card-text{font-size:16px}
+  .photo-card{max-width:340px;padding:22px 14px 20px}
+  .photo-gallery{gap:8px}
+  .envelope{width:175px;height:110px}
+}
+
+/* LOVE BERTERBANGAN */
+.floating-love {
+    position: fixed;
+    bottom: -40px;
+    left: 0;
+    z-index: 9999;
+    pointer-events: none;
+    user-select: none;
+    font-size: 22px;
+    animation: loveFly linear forwards;
+    filter: drop-shadow(0 2px 4px rgba(255, 120, 160, 0.25));
+}
+
+@keyframes loveFly {
+    0% {
+        transform: translateY(0) translateX(0) rotate(0deg) scale(0.7);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    50% {
+        transform: translateY(-50vh) translateX(35px) rotate(15deg) scale(1);
+        opacity: 0.9;
+    }
+
+    100% {
+        transform: translateY(-115vh) translateX(-45px) rotate(-20deg) scale(1.25);
+        opacity: 0;
+    }
+}
+
+
+</style>
+</head>
+
+<body>
+
+<div class="bg-decoration">
+  <span class="deco">✧</span>
+  <span class="deco">✦</span>
+  <span class="deco">✧</span>
+  <span class="deco">✦</span>
+  <span class="deco">✧</span>
+  <span class="deco">♡</span>
+  <span class="deco">✧</span>
+  <span class="deco">♡</span>
+  <span class="deco">♡</span>
+  <span class="deco">✧</span>
+  <span class="deco">♡</span>
+  <span class="deco">✧</span>
+  <span class="deco">♡</span>
+  <span class="deco">♡</span>
+  <span class="deco">♡</span>
+</div>
+
+<div class="app">
+
+<!-- PAGE 1 : PIN -->
+
+<section class="page active" id="page1">
+  <div class="card">
+
+    <img src="icon1.webp" class="card-icon" alt="Ikon Amoy">
+
+    <h1 class="card-title">wendy &lt;3</h1>
+
+    <p class="card-text small">
+      Masukkan PIN untuk membuka pesan ini:
+    </p>
+
+    <div class="pin-wrap">
+      <input class="pin" maxlength="1" inputmode="numeric">
+      <input class="pin" maxlength="1" inputmode="numeric">
+      <input class="pin" maxlength="1" inputmode="numeric">
+      <input class="pin" maxlength="1" inputmode="numeric">
+    </div>
+
+    <div class="clue-link" onclick="openClue()">
+      need a clue?
+    </div>
+
+    <div class="error" id="error"></div>
+
+    <button class="open-btn" onclick="checkPin()">
+      Open Me
+    </button>
+
+    <p class="date-small">10.11.2026</p>
+
+  </div>
+</section>
+
+
+<!-- PAGE 2 : PESAN 1 -->
+
+<section class="page" id="page2">
+  <div class="card">
+
+    <img src="icon2.webp" class="card-icon" alt="Ikon pesan">
+
+    <h2 class="card-title">haii,</h2>
+
+    <p class="card-text">
+Sekarang hari ulang tahun kamu yaaa, aku cuman mau bilang selamat ulang tahun yaa, panjang umur sehat selalu, semoga cita” kamu tercapai dan kamu jadi pribadi lebih baik lagi
+    </p>
+
+    <button class="next-btn" onclick="nextPage()">
+      Lanjut
+    </button>
+
+  </div>
+</section>
+
+
+<!-- PAGE 3 : PESAN 2 -->
+
+<section class="page" id="page3">
+  <div class="card">
+
+    <img src="icon3.webp" class="card-icon" alt="Ikon pesan">
+
+    <h2 class="card-title">Happy Birthday</h2>
+
+    <p class="card-text">
+  Hari ini tentang kamu.<br>
+  Tentang bertambahnya satu tahun lagi.
+</p>
+
+<p class="card-text">
+  Semoga di usia yang baru,<br>
+  banyak hal baik datang menghampiri.
+</p>
+
+<p class="card-text">
+  Tetap jadi kamu,<br>
+  dan semoga selalu bahagia.
+</p>
+
+    <button class="next-btn" onclick="nextPage()">
+      Lanjut
+    </button>
+
+  </div>
+</section>
+
+
+<!-- PAGE 4 : PESAN 3 -->
+
+<section class="page" id="page4">
+  <div class="card">
+
+    <img src="icon6.webp" class="card-icon" alt="Ikon pesan">
+
+    <h2 class="card-title">
+     
+    </h2>
+
+    <p class="card-text">
+  Di hari ulang tahunmu ini,<br>
+  aku cuma ingin kamu tahu kalau<br>
+  kehadiranmu adalah salah satu hal baik<br>
+  yang aku syukuri sampai sekarang.
+</p>
+
+    <button class="next-btn" onclick="nextPage()">
+      Lanjut
+    </button>
+
+  </div>
+</section>
+
+
+<!-- PAGE 5 : AMPLOP -->
+
+<section class="page" id="page5">
+  <div class="card">
+
+    <h2 class="card-title">
+      Ada surat buat kamu.
+    </h2>
+
+    <p class="card-text">
+      Klik amplopnya yaa.
+    </p>
+
+    <div class="envelope"
+         onclick="openLetter()"
+         role="button"
+         tabindex="0">
+
+      <div class="envelope-body"></div>
+      <div class="envelope-flap"></div>
+      <div class="seal">♥</div>
+
+    </div>
+
+    <div class="envelope-hint"></div>
+
+  </div>
+</section>
+
+
+<!-- PAGE 6 : SURAT PANJANG -->
+
+<section class="page" id="page6">
+  <div class="card final-card">
+    <img src="icon4.webp" class="card-icon" alt="Ikon pesan">
+
+    <h2 class="card-title">HAPPY BIRTHDAY</h2>
+
+    <div class="divider"></div>
+
+  <p class="card-text">
+  Happy birthday, Wendy<br>
+  Semoga di usia barumu,<br>
+  semua hal baik datang satu per satu.
+</p>
+
+<p class="card-text">
+  Semoga selalu sehat,<br>
+  dimudahkan dalam segala urusan,<br>
+  dan jangan lupa bahagia.
+</p>
+
+<p class="card-text">
+  Aku bersyukur bisa mengenalmu.<br>
+  Semoga hari ini jadi awal<br>
+  dari banyak hal baik ke depannya.
+</p>
+
+<p class="card-text">
+  Selamat bertambah usia, Wendy.<br>
+  Semoga semua harapanmu<br>
+  bisa segera terwujud.
+</p>
+
+
+  </div>
+</section>
+
+
+
+<!-- MODAL CLUE -->
+
+<div class="modal" id="clueModal">
+  <div class="modal-box">
+
+    <p class="modal-text">
+      Clue:  angka yang kamu suka
+      👉🏻👈🏻
+    </p>
+
+    <button class="modal-btn" onclick="closeClue()">
+      Oke!
+    </button>
+
+  </div>
+</div>
+
+
+<!-- MUSIK -->
+
+<audio id="music" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<button class="music-btn" id="musicBtn" onclick="toggleMusic()">
+  🎵
+</button>
+
+
+<script>
+
+/* =========================
+   PAGE SYSTEM
+========================= */
+
+const pages = document.querySelectorAll('.page');
+let currentPage = 0;
+
+function showPage(index){
+
+  if(index < 0 || index >= pages.length) return;
+
+  pages.forEach((page,i)=>{
+    page.classList.toggle('active',i === index);
+  });
+
+  currentPage = index;
+
+  window.scrollTo({
+    top:0,
+    behavior:'smooth'
+  });
+
+}
+
+function nextPage(){
+  showPage(currentPage + 1);
+}
+
+
+/* =========================
+   PIN
+========================= */
+
+function checkPin(){
+
+  const pins = [...document.querySelectorAll('.pin')];
+  const value = pins.map(input=>input.value).join('');
+
+  if(value === '8888'){
+
+    document.getElementById('error').textContent = '';
+
+    showPage(1);
+
+    const music = document.getElementById('music');
+
+    music.play().catch(()=>{});
+
+    isPlaying = true;
+
+    document.getElementById('musicBtn').textContent = '⏸️';
+
+  }else{
+
+    document.getElementById('error').textContent =
+      'klik clue';
+
+    pins.forEach(input=>{
+      input.value = '';
+    });
+
+    pins[0].focus();
+
+  }
+
+}
+
+
+/* =========================
+   PIN AUTO MOVE
+========================= */
+
+document.querySelectorAll('.pin').forEach((input,index,all)=>{
+
+  input.addEventListener('input',()=>{
+
+    input.value = input.value.replace(/\D/g,'');
+
+    if(input.value && index < all.length - 1){
+      all[index + 1].focus();
+    }
+
+  });
+
+  input.addEventListener('keydown',(e)=>{
+
+    if(e.key === 'Backspace' && !input.value && index > 0){
+      all[index - 1].focus();
+    }
+
+    if(e.key === 'Enter'){
+      checkPin();
+    }
+
+  });
+
+});
+
+
+/* =========================
+   CLUE MODAL
+========================= */
+
+function openClue(){
+  document.getElementById('clueModal').classList.add('show');
+}
+
+function closeClue(){
+  document.getElementById('clueModal').classList.remove('show');
+}
+
+document.getElementById('clueModal').addEventListener('click',(e)=>{
+  if(e.target.id === 'clueModal'){
+    closeClue();
+  }
+});
+
+
+/* =========================
+   ENVELOPE
+========================= */
+
+function openLetter(){
+  showPage(5);
+}
+
+document.querySelector('.envelope').addEventListener('keydown',(e)=>{
+  if(e.key === 'Enter' || e.key === ' '){
+    e.preventDefault();
+    openLetter();
+  }
+});
+
+
+/* =========================
+   MUSIC
+========================= */
+
+let isPlaying = false;
+
+function toggleMusic(){
+
+  const music = document.getElementById('music');
+  const btn = document.getElementById('musicBtn');
+
+  if(isPlaying){
+
+    music.pause();
+    btn.textContent = '🎵';
+
+  }else{
+
+    music.play().catch(()=>{
+      alert('Klik tombol musik sekali lagi yaa 💛');
+    });
+
+    btn.textContent = '⏸️';
+
+  }
+
+  isPlaying = !isPlaying;
+
+}
+
+/* LOVE BERTERBANGAN */
+const loveSymbols = ["💗", "♡", "♥"];
+
+function createFloatingLove() {
+    const love = document.createElement("div");
+
+    love.className = "floating-love";
+    love.textContent =
+        loveSymbols[Math.floor(Math.random() * loveSymbols.length)];
+
+    love.style.left = Math.random() * 100 + "vw";
+    love.style.fontSize = 16 + Math.random() * 18 + "px";
+    love.style.animationDuration = 5 + Math.random() * 5 + "s";
+    love.style.animationDelay = Math.random() * 1.5 + "s";
+
+    document.body.appendChild(love);
+
+    setTimeout(() => {
+        love.remove();
+    }, 11000);
+}
+
+/* Love muncul setiap 700 milidetik */
+setInterval(createFloatingLove, 700);
+
+</script>
+
+</body>
+</html>
